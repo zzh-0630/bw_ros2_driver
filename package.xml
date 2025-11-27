@@ -7,10 +7,9 @@
   <maintainer email="zhangzihao@bwsensing.com">zzh</maintainer>
   <license>MIT</license>
 
-  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>  
 
   <depend>rclcpp</depend>
-  <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
   <depend>tf2</depend>
   <depend>tf2_geometry_msgs</depend>

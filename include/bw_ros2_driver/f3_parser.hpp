@@ -1,7 +1,7 @@
 /*!
  *  \file         f3_parser.hpp
  *  \author       BW
- *  \date         22/11/2025
+ *  \date         26/11/2025
  *  \brief        f3 protocol parser of bwsensing devices.
  *
  *  Parser for the f3 protocol of bwsensing devices.

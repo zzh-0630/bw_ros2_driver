@@ -1,7 +1,7 @@
 /*!
  *  \file         bws_parser.hpp
  *  \author       BW
- *  \date         15/10/2025
+ *  \date         26/11/2025
  *  \brief        Standard protocol parser of bwsensing devices.
  *
  *  Parser for the standard protocol of bwsensing devices.
@@ -32,7 +32,7 @@
 #pragma once
 #include <cstdint>
 #include <vector>
-#include "bw_ros_driver/bcd_utils.hpp"
+#include "bw_ros2_driver/bcd_utils.hpp"
 
 namespace bw 
 {

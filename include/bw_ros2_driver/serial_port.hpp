@@ -1,7 +1,7 @@
 /*!
 *  \file         serial_port.hpp
 *  \author       BW 
-*  \date         15/10/2025
+*  \date         26/11/2025
 *  \brief        Serial port configuration.
 *
 *  Structure to store serial port configuration.

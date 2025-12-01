@@ -1,4 +1,3 @@
-bw_ros2_driver 使用说明（ROS2 Foxy）
 # 1. 简介
 
 bw_ros2_driver 是一套用于北微传感产品的 ROS2 驱动程序，基于串口通信，实现以下功能：
@@ -64,8 +63,8 @@ ros2 launch bw_ros2_driver bw_dmc_launch.xml
 # 5. 已发布的 ROS2 话题
 | 话题名                | 消息类型                        | 描述                                 |
 | --------------------- | ------------------------------- | ------------------------------------ |
-| `/imu/data`（可配置） | `sensor_msgs/msg/Imu`           | IMU 主数据（姿态、角速度、线加速度） |
-| `/imu/mag`            | `sensor_msgs/msg/MagneticField` | 三轴磁场数据                         |
+| `/imu/data`（可配置） | `sensor_msgs/Imu`           | IMU 主数据（姿态、角速度、线加速度） |
+| `/imu/mag`            | `sensor_msgs/MagneticField` | 三轴磁场数据                         |
 
 你可以使用以下命令查看：
 ```

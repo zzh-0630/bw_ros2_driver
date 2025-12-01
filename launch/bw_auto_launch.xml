@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="bw_ros2_driver" exec="bw_node" name="bw_node" namespace="bw_ros2"/>
+    <node pkg="rviz2" exec="rviz2" name="rviz2" args="-d $(find-pkg-share bw_ros2_driver)/config/rviz_config.rviz" />
+</launch>

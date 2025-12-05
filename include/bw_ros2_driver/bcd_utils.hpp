@@ -1,5 +1,6 @@
 #pragma once
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 
 // 求和校验（8位），对 [长度..数据域] 求和，不含 0x77，不含校验字节本身

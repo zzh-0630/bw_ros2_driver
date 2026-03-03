@@ -1,0 +1,20 @@
+/**:
+  ros__parameters:
+    # Common parameters for serial-based nodes (standard / nova)
+    port: "/dev/ttyUSB0"
+    baud: 115200
+
+    frame_id: "imu_link"
+    imu_topic: "/imu/data"
+    mag_topic: "/imu/mag"
+    mag_unit: "gauss"   # gauss | uT
+
+    # Loop sleep rate (Hz). Data publish rate is driven by the device output.
+    publish_rate: 200.0
+
+    debug: true
+
+    # Covariance (-1 means unknown)
+    cov_orientation: -1.0
+    cov_angular_velocity: -1.0
+    cov_linear_acceleration: -1.0

@@ -1,77 +1,80 @@
-# 1. 简介
+# bw_ros_driver (ROS 2 Humble)
 
-bw_ros2_driver 是一套用于北微传感产品的 ROS2 驱动程序，基于串口通信，实现以下功能：
+## 1. 功能简介
 
-- 读取 IMU 原始数据（姿态四元数 / 欧拉角、角速度、线加速度）
+本驱动支持 **串口（Standard 0x77 / Nova 0xF3）** 与 **SocketCAN（单ID+payload mux）** 两种接入方式：
 
-- 发布标准 ROS2 IMU 消息 sensor_msgs/Imu
+- `bw_node_standard`：解析 **0x77 标准协议**，发布
+  - `sensor_msgs/msg/Imu`（`imu_topic`）
+  - `sensor_msgs/msg/MagneticField`（`mag_topic`，可选）
+- `bw_node_nova`：解析 **0xF3 Nova 协议**，发布同上
+- `bw_node_can`：读取 **SocketCAN**，对多帧 IMU 数据进行聚合并发布 `sensor_msgs/msg/Imu`
 
-- 发布磁场消息 sensor_msgs/MagneticField
+## 2. 构建与运行（ROS 2）
 
-- 目前已适配北微传感的常用协议
-- 该驱动使用 ROS2 Foxy 开发，其他环境待测试
-# 2. 软件依赖
+### 2.1 构建
 
-请确保系统已安装：
-- ROS2 Foxy（或兼容版本）
-- colcon build 工具
-- C++14 编译器
-  
-依赖 ROS2 包：
-```
-rclcpp
-sensor_msgs
-std_msgs
-tf2
-tf2_geometry_msgs
-```
-这些依赖已在 package.xml 和 CMakeLists.txt 中自动处理。
+```bash
+# 1) 创建工作空间
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws/src
 
-# 3. 编译
+# 2) 放入本包（bw_ros_driver）
+#   - 例如：git clone ...
+#   - 或者把本仓库拷贝到 src 下
 
-将本项目放入你的 ROS2 工作空间，例如：
-```
-~/ros2_ws/src/bw_ros2_driver
-```
-
-编译：
-```
 cd ~/ros2_ws
-colcon build --packages-select bw_ros2_driver
-```
-编译完成后，加载环境：
-```
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install
 source install/setup.bash
 ```
-# 4. 启动
-北微传感AHRS、MINS、VG系列产品的启动：
-```
-ros2 run bw_ros2_driver bw_node
-```
-北微传感DMC系列产品启动：
-```
-ros2 run bw_ros2_driver bw_node_dmc
-```
-带rviz的启动可以通过launch：
-```
-ros2 launch bw_ros2_driver bw_auto_launch.xml
-#或者
-ros2 launch bw_ros2_driver bw_dmc_launch.xml
-```
-![alt text](source/image.png)
 
-# 5. 已发布的 ROS2 话题
-| 话题名                | 消息类型                        | 描述                                 |
-| --------------------- | ------------------------------- | ------------------------------------ |
-| `/imu/data`（可配置） | `sensor_msgs/Imu`           | IMU 主数据（姿态、角速度、线加速度） |
-| `/imu/mag`            | `sensor_msgs/MagneticField` | 三轴磁场数据                         |
+### 2.2 串口节点（standard / nova）
 
-你可以使用以下命令查看：
+1) 确认设备存在并赋权：
+
+```bash
+ls -l /dev/ttyUSB*
+sudo chmod a+rw /dev/ttyUSB0
 ```
-ros2 topic echo /imu/data
 
-ros2 topic echo /imu/mag
+2) 修改参数：
+
+- `config/common_params_ros2.yaml`
+
+3) 启动：
+
+```bash
+ros2 launch bw_ros_driver bw_ros_standard.launch.py
+# 或
+ros2 launch bw_ros_driver bw_ros_nova.launch.py
 ```
-# 6. 调试输出
 
-如果 debug = true（默认开启），每秒会打印一次最近收到的数据帧。
+### 2.3 CAN 节点（SocketCAN）
+
+1) 配置 can0（bitrate 按设备实际设置）：
+
+```bash
+sudo ip link set can0 down || true
+sudo ip link set can0 up type can bitrate 500000
+ip -details link show can0
+```
+
+2) 修改参数：
+
+- `config/can_params_ros2.yaml`
+
+3) 启动：
+
+```bash
+ros2 launch bw_ros_driver bw_ros_can.launch.py
+```
+
+## 3. 话题输出
+
+- IMU：`/imu/data`（默认，可在参数里改）
+- MAG：`/imu/mag`（串口节点默认，可在参数里改）
+
+## 4. 常见问题
+
+- **没有数据**：优先确认串口/波特率、CAN 接口状态（`ip link`）、以及传感器是否开启自动输出。

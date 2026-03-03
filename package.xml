@@ -1,20 +1,17 @@
 <?xml version="1.0"?>
-<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>bw_ros2_driver</name>
-  <version>1.0.0</version>
-  <description>The bw_ros2_driver package</description>
+  <name>bw_ros_driver</name>
+  <version>2.0.0</version>
+  <description>BW IMU driver (serial + SocketCAN) for ROS 2 Humble.</description>
+
   <maintainer email="zhangzihao@bwsensing.com">zzh</maintainer>
   <license>MIT</license>
 
-  <buildtool_depend>ament_cmake</buildtool_depend>  
+  <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>rclcpp</depend>
-  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
   <depend>tf2</depend>
-  <depend>tf2_geometry_msgs</depend>
-
-  <exec_depend>ros2launch</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

@@ -1,0 +1,27 @@
+/**:
+  ros__parameters:
+    # Parameters for bw_node_can (SocketCAN IMU)
+    can_iface: "can0"
+    can_id: 0x585
+    rx_timeout_ms: 50
+
+    imu_topic: "/imu/data"
+    frame_id: "imu_link"
+
+    # Aggregation window: max time to complete a group / freshness threshold (50-100 ms is typical at 200 Hz)
+    max_age_ms: 100
+
+    # Orientation strategy
+    prefer_quat: true
+    allow_angle_fallback: true
+
+    # Strictness
+    require_acc: true
+    require_orientation: true
+
+    # Covariance (-1 means unknown)
+    cov_orientation: -1.0
+    cov_angular_velocity: -1.0
+    cov_linear_acceleration: -1.0
+
+    debug: true

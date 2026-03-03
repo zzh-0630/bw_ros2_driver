@@ -28,7 +28,7 @@
 
 #include <rclcpp/time.hpp>
 
-#include "bw_ros_driver/can_decode_utils.hpp"
+#include "bw_ros2_driver/can_decode_utils.hpp"
 
 namespace bw
 {

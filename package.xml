@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
-  <name>bw_ros_driver</name>
-  <version>2.0.0</version>
+  <name>bw_ros2_driver</name>
+  <version>1.0.0</version>
   <description>BW IMU driver (serial + SocketCAN) for ROS 2 Humble.</description>
 
   <maintainer email="zhangzihao@bwsensing.com">zzh</maintainer>

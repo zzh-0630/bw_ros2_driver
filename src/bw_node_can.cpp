@@ -10,8 +10,8 @@
 #include <vector>
 
 // Project headers
-#include "bw_ros_driver/can_imu_aggregator.hpp"
-#include "bw_ros_driver/can_port.hpp"
+#include "bw_ros2_driver/can_imu_aggregator.hpp"
+#include "bw_ros2_driver/can_port.hpp"
 
 int main(int argc, char** argv)
 {

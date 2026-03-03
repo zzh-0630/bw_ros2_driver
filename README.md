@@ -1,4 +1,14 @@
 # bw_ros_driver (ROS 2 Humble)
+北微ROS驱动仓库提供了北微产品的ROS驱动程序支持，目前支持ROS1,ROS2双版本，支持串口，CAN双接口，适配北微标准协议（77开头）与Nova协议（F3开头），仓库地址如下：
+
+ROS1：https://github.com/zzh-0630/bw_ros_driver
+
+ROS2：https://github.com/zzh-0630/bw_ros2_driver
+
+！！！注意：
+- 本仓库完全开源，可任意修改使用
+- 本仓库持续开发优化中，不保证完全可靠，若有bug，可及时联系开发人员更新维护
+- ROS官方已经停止了对ROS1的维护，后续开发维护会主要在ROS2基础上进行
 
 ## 1. 功能简介
 

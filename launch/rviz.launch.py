@@ -6,7 +6,7 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    pkg_share = get_package_share_directory('bw_ros_driver')
+    pkg_share = get_package_share_directory('bw_ros2_driver')
     rviz_config = os.path.join(pkg_share, 'config', 'rviz_config.rviz')
 
     return LaunchDescription([

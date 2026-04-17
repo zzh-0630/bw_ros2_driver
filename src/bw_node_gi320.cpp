@@ -30,7 +30,7 @@ int navSatStatusFromPosStatus(uint8_t pos_status)
 int main(int argc, char** argv)
 {
   rclcpp::init(argc, argv);
-  auto node = std::make_shared<rclcpp::Node>("bw_node_gixxx");
+  auto node = std::make_shared<rclcpp::Node>("bw_node_gi320");
   auto logger = node->get_logger();
 
   const std::string port = node->declare_parameter<std::string>("port", "/dev/ttyUSB1");
@@ -41,11 +41,11 @@ int main(int argc, char** argv)
     node->declare_parameter<std::string>("velocity_frame_id", "enu");
 
   const std::string raw_topic =
-    node->declare_parameter<std::string>("raw_topic", "/gixxx/raw");
+    node->declare_parameter<std::string>("raw_topic", "/gi320/raw");
   const std::string navsat_topic =
-    node->declare_parameter<std::string>("navsat_topic", "/fix");
+    node->declare_parameter<std::string>("navsat_topic", "/gi320/fix");
   const std::string velocity_topic =
-    node->declare_parameter<std::string>("velocity_topic", "/gixxx/velocity");
+    node->declare_parameter<std::string>("velocity_topic", "/gi320/velocity");
 
   const bool publish_raw = node->declare_parameter<bool>("publish_raw", true);
   const bool publish_navsat = node->declare_parameter<bool>("publish_navsat", true);

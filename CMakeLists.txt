@@ -35,9 +35,9 @@ set_target_properties(serial_port standard_parser nova_parser can_port inspva_pa
 add_executable(bw_node_standard src/bw_node_standard.cpp)
 add_executable(bw_node_nova src/bw_node_nova.cpp)
 add_executable(bw_node_can src/bw_node_can.cpp)
-add_executable(bw_node_gixxx src/bw_node_gixxx.cpp)
+add_executable(bw_node_gi320 src/bw_node_gi320.cpp)
 
-set_target_properties(bw_node_standard bw_node_nova bw_node_can bw_node_gixxx
+set_target_properties(bw_node_standard bw_node_nova bw_node_can bw_node_gi320
   PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED YES
@@ -58,18 +58,17 @@ target_link_libraries(bw_node_can
   can_port
 )
 
-target_link_libraries(bw_node_gixxx
+target_link_libraries(bw_node_gi320
   serial_port
   inspva_parser
 )
 
-
 ament_target_dependencies(bw_node_standard rclcpp sensor_msgs tf2)
 ament_target_dependencies(bw_node_nova rclcpp sensor_msgs tf2)
 ament_target_dependencies(bw_node_can rclcpp sensor_msgs tf2)
-ament_target_dependencies(bw_node_gixxx geometry_msgs rclcpp sensor_msgs std_msgs tf2)
+ament_target_dependencies(bw_node_gi320 geometry_msgs rclcpp sensor_msgs std_msgs tf2)
 
-rosidl_target_interfaces(bw_node_gixxx
+rosidl_target_interfaces(bw_node_gi320
   ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 ament_export_dependencies(rosidl_default_runtime)
@@ -83,7 +82,7 @@ install(TARGETS
   can_port
   bw_node_standard
   bw_node_nova
-  bw_node_gixxx
+  bw_node_gi320
   bw_node_can
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib

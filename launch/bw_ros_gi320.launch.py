@@ -7,13 +7,13 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     pkg_share = get_package_share_directory('bw_ros2_driver')
-    params_file = os.path.join(pkg_share, 'config', 'gixxx_params_ros2.yaml')
+    params_file = os.path.join(pkg_share, 'config', 'gi320_params_ros2.yaml')
 
     return LaunchDescription([
         Node(
             package='bw_ros2_driver',
-            executable='bw_node_gixxx',
-            name='bw_node_gixxx',
+            executable='bw_node_gi320',
+            name='bw_node_gi320',
             output='screen',
             parameters=[params_file],
         ),

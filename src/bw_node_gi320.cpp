@@ -3,12 +3,14 @@
 #include <sensor_msgs/msg/nav_sat_fix.hpp>
 #include <sensor_msgs/msg/nav_sat_status.hpp>
 
+// Standard headers
 #include <algorithm>
 #include <cerrno>
 #include <cstring>
 #include <string>
 #include <vector>
 
+// Project headers
 #include "bw_ros2_driver/inspva_parser.hpp"
 #include "bw_ros2_driver/msg/bewis_inspva.hpp"
 #include "bw_ros2_driver/serial_port.hpp"
@@ -30,6 +32,9 @@ int navSatStatusFromPosStatus(uint8_t pos_status)
 int main(int argc, char** argv)
 {
   rclcpp::init(argc, argv);
+  //-------------------------------------------------------------------//
+  // Parameters                                                        //
+  //-------------------------------------------------------------------//
   auto node = std::make_shared<rclcpp::Node>("bw_node_gi320");
   auto logger = node->get_logger();
 
@@ -53,6 +58,9 @@ int main(int argc, char** argv)
   const bool debug = node->declare_parameter<bool>("debug", true);
   const double publish_rate = node->declare_parameter<double>("publish_rate", 10);
 
+  //-------------------------------------------------------------------//
+  // Open serial port                                                  //
+  //-------------------------------------------------------------------//
   bw::SerialPort serial(port, baud);
   if (!serial.openSerial())
   {
@@ -63,7 +71,10 @@ int main(int argc, char** argv)
 
   RCLCPP_INFO(logger, "Opened %s @ %d, publishing INSPVA raw=%s fix=%s vel=%s",
               port.c_str(), baud, raw_topic.c_str(), navsat_topic.c_str(), velocity_topic.c_str());
-
+  
+  //-------------------------------------------------------------------//
+  // Publishers                                                        //
+  //-------------------------------------------------------------------//
   rclcpp::Publisher<bw_ros2_driver::msg::BewisInspva>::SharedPtr raw_pub;
   if (publish_raw)
   {
@@ -82,6 +93,9 @@ int main(int argc, char** argv)
     vel_pub = node->create_publisher<geometry_msgs::msg::TwistStamped>(velocity_topic, rclcpp::SensorDataQoS());
   }
 
+  //-------------------------------------------------------------------//
+  // Parser                                                            //
+  //-------------------------------------------------------------------//
   bw::InspvaParser parser;
 
   const auto clock = node->get_clock();

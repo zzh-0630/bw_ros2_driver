@@ -10,81 +10,130 @@ ROS2：https://github.com/zzh-0630/bw_ros2_driver
 - 本仓库持续开发优化中，不保证完全可靠，若有bug，可及时联系开发人员更新维护
 - ROS官方已经停止了对ROS1的维护，后续开发维护会主要在ROS2基础上进行
 
-## 1. 功能简介
 
-本驱动支持 **串口（Standard 0x77 / Nova 0xF3）** 与 **SocketCAN（单ID+payload mux）** 两种接入方式：
+## 1. 仓库简介与产品支持
+北微传感器 ROS 2 驱动仓库，面向 **ROS 2 Humble**，支持多种设备协议与接入方式，包括：
 
-- `bw_node_standard`：解析 **0x77 标准协议**，发布
-  - `sensor_msgs/msg/Imu`（`imu_topic`）
-  - `sensor_msgs/msg/MagneticField`（`mag_topic`，可选）
-- `bw_node_nova`：解析 **0xF3 Nova 协议**，发布同上
-- `bw_node_can`：读取 **SocketCAN**，对多帧 IMU 数据进行聚合并发布 `sensor_msgs/msg/Imu`
+- **串口标准协议**（帧头 `0x77`）
+- **串口 Nova 协议**（帧头 `0xF3`）
+- **GI320 INSPVA 导航数据协议**
+- **SocketCAN IMU 数据接入**
 
-## 2. 构建与运行（ROS 2）
+本仓库的目标是将北微设备输出的数据统一封装为 ROS 2 消息，便于定位导航、姿态解算、机器人控制与上层算法集成。
+本ROS驱动仓库是通配仓库，会对北微产品做全系列支持，目前已完成对IMU系列，MINS系列，AHRS系列，DMC系列，组合导航GI320的支持与测试。
+![alt text](image.png)
 
-### 2.1 构建
+
+## 2. 功能简介
+当前仓库包含 4 个可执行节点：
+
+| 节点名             | 接口类型  | 协议/数据源                      | 主要输出                                                     |
+| ------------------ | --------- | -------------------------------- | ------------------------------------------------------------ |
+| `bw_node_standard` | 串口      | 标准协议 `0x77`                  | `sensor_msgs/msg/Imu`、`sensor_msgs/msg/MagneticField`       |
+| `bw_node_nova`     | 串口      | Nova 协议 `0xF3`                 | `sensor_msgs/msg/Imu`、`sensor_msgs/msg/MagneticField`       |
+| `bw_node_gi320`    | 串口      | GI320 INSPVA 数据                | `bw_ros2_driver/msg/BewisInspva`、`sensor_msgs/msg/NavSatFix`、`geometry_msgs/msg/TwistStamped` |
+| `bw_node_can`      | SocketCAN | 私有单 ID + payload mux IMU 数据 | `sensor_msgs/msg/Imu`                                        |
+
+您可针对不同的产品启动相对应的ROS节点，读取对应的消息输出。
+
+## 3. 环境要求
+
+建议环境：
+
+- Ubuntu 22.04
+- ROS 2 Humble
+- `colcon`
+- Linux 串口设备访问权限
+- SocketCAN（仅 CAN 模式需要）
+
+## 4. 编译方法
+
+### 4.1 创建工作空间
 
 ```bash
-# 1) 创建工作空间
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
+```
 
-# 2) 放入本包（bw_ros_driver）
-#   - 例如：git clone ...
-#   - 或者把本仓库拷贝到 src 下
+将本仓库放入 `src` 目录，例如：
 
+```bash
+cd ~/ros2_ws/src
+git clone https://github.com/zzh-0630/bw_ros2_driver.git
+```
+
+### 4.2 编译
+
+```bash
 cd ~/ros2_ws
 source /opt/ros/humble/setup.bash
-colcon build --symlink-install
+colcon build --symlink-install --packages-select bw_ros2_driver
 source install/setup.bash
 ```
 
-### 2.2 串口节点（standard / nova）
+## 5. 启动方式
+### 5.1 标准协议串口节点
 
-1) 确认设备存在并赋权：
+适用于输出 **`0x77` 标准协议** 的设备。
+
+启动前建议先确认串口存在：
 
 ```bash
 ls -l /dev/ttyUSB*
+```
+
+必要时赋权：
+
+```bash
 sudo chmod a+rw /dev/ttyUSB0
 ```
 
-2) 修改参数：
-
-- `config/common_params_ros2.yaml`
-
-3) 启动：
+启动命令：
 
 ```bash
-ros2 launch bw_ros_driver bw_ros_standard.launch.py
-# 或
-ros2 launch bw_ros_driver bw_ros_nova.launch.py
+ros2 launch bw_ros2_driver bw_ros_standard.launch.py
 ```
 
-### 2.3 CAN 节点（SocketCAN）
+---
 
-1) 配置 can0（bitrate 按设备实际设置）：
+### 5.2 Nova 协议串口节点
+
+适用于输出 **`0xF3` Nova 协议** 的设备。
+
+启动命令：
+
+```bash
+ros2 launch bw_ros2_driver bw_ros_nova.launch.py
+```
+
+---
+
+### 5.3 GI320 导航节点
+
+针对北微产品GI320做的单独适配，输出 **INSPVA 导航数据** 。
+
+启动命令：
+
+```bash
+ros2 launch bw_ros2_driver bw_ros_gi320.launch.py
+```
+
+---
+
+### 5.4 CAN 节点
+
+适用于通过 **SocketCAN** 接收 IMU 数据的设备。
+
+先配置 CAN 网口：
 
 ```bash
 sudo ip link set can0 down || true
-sudo ip link set can0 up type can bitrate 500000
+sudo ip link set can0 up type can bitrate 250000
 ip -details link show can0
 ```
 
-2) 修改参数：
-
-- `config/can_params_ros2.yaml`
-
-3) 启动：
+启动命令：
 
 ```bash
-ros2 launch bw_ros_driver bw_ros_can.launch.py
+ros2 launch bw_ros2_driver bw_ros_can.launch.py
 ```
-
-## 3. 话题输出
-
-- IMU：`/imu/data`（默认，可在参数里改）
-- MAG：`/imu/mag`（串口节点默认，可在参数里改）
-
-## 4. 常见问题
-
-- **没有数据**：优先确认串口/波特率、CAN 接口状态（`ip link`）、以及传感器是否开启自动输出。

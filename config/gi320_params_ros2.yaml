@@ -1,0 +1,18 @@
+/**:
+  ros__parameters:
+    port: "/dev/ttyUSB1"
+    baud: 115200
+
+    frame_id: "gps_link"
+    velocity_frame_id: "enu"
+
+    raw_topic: "/gi320/raw"
+    navsat_topic: "/gi320/fix"
+    velocity_topic: "/gi320/velocity"
+
+    publish_raw: true
+    publish_navsat: true
+    publish_velocity: true
+
+    publish_rate: 20.0
+    debug: true

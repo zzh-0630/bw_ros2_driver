@@ -21,8 +21,7 @@ ROS2：https://github.com/zzh-0630/bw_ros2_driver
 
 本仓库的目标是将北微设备输出的数据统一封装为 ROS 2 消息，便于定位导航、姿态解算、机器人控制与上层算法集成。
 本ROS驱动仓库是通配仓库，会对北微产品做全系列支持，目前已完成对IMU系列，MINS系列，AHRS系列，DMC系列，组合导航GI320的支持与测试。
-![alt text](image.png)
-
+![alt text](assets/README/支持产品.png)
 
 ## 2. 功能简介
 当前仓库包含 4 个可执行节点：
